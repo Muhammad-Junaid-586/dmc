@@ -12,6 +12,9 @@ app.use(cors({
 app.post('/api/auth/login', (req, res) => {
   res.json({ message: 'Login successful' });
 });
+app.post('/api/auth/register', (req, res) => {
+  res.json({ message: 'Login successful' });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));
