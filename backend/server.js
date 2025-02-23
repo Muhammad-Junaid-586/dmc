@@ -1,16 +1,16 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
-app.get('/api', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
-});
+// Enable CORS
+app.use(cors({
+  origin: "https://dmc-iz4d.vercel.app",
+  credentials: true
+}));
 
-app.get('/api/auth', (req, res) => {
-  res.json({ message: 'Auth route' });
-});
-
-app.get('/api/uploads', (req, res) => {
-  res.json({ message: 'Uploads route' });
+// Routes
+app.post('/api/auth/login', (req, res) => {
+  res.json({ message: 'Login successful' });
 });
 
 const PORT = process.env.PORT || 5000;
