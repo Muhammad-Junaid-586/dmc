@@ -11,7 +11,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://dmc-iz4d.vercel.app/api/auth/login",
+        "https://dmc-iz4d.vercel.app/api/auth/register",
         {
           username,
           password,

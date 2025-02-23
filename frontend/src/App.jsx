@@ -43,12 +43,7 @@ const App = () => {
       {/* Navbar is rendered outside the Routes to appear on all pages */}
       <Navbar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            localStorage.getItem("token") ? <Home /> : <Navigate to="/login" />
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
