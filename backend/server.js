@@ -14,23 +14,21 @@ const app = express();
 connectDB();
 
 // ✅ Middleware
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-// app.use(cors(
-//     {
-//         origin: ["https://dmc-gray.vercel.app/"],
-//         methods: ["POST", "GET"],
-//         credentials: true
-//     }
-// ));
+app.use(cors({
+  origin: ["http://localhost:5173", "https://dmc-gray.vercel.app"],
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.get('/', (req , res)=>{
-    res.json('Hello')
-})
-// ✅ API Routes
-// app.use("/auth", authRoutes);
-// app.use("/uploads", uploadRoutes);
 
+// ✅ API Routes
+app.use("/auth", authRoutes);
+app.use("/uploads", uploadRoutes);
+
+// ✅ Root Route
+app.get('/', (req, res) => {
+  res.json('Hello');
+});
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
