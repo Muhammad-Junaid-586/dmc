@@ -28,8 +28,8 @@ app.get('/', (req , res)=>{
     res.json('Hello')
 })
 // ✅ API Routes
-app.use("/auth", authRoutes);
-app.use("/uploads", uploadRoutes);
+// app.use("/auth", authRoutes);
+// app.use("/uploads", uploadRoutes);
 
 
 // ✅ Start Server
