@@ -29,7 +29,9 @@ app.use("/uploads", uploadRoutes);
 app.get('/', (req, res) => {
   res.json('Hello');
 });
-
+app.get('/test', (req, res) => {
+    res.json({ message: 'Test route is working!' });
+  });
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
