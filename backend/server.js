@@ -16,7 +16,7 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: "https://dmc-iz4d.vercel.app", credentials: true })); // Allow requests from frontend
+app.use(cors({ origin: "https://dmc-frontend-phi.vercel.app", credentials: true })); // Allow requests from frontend
 app.use(express.json()); // Parse JSON request bodies
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
 
