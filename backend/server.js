@@ -22,7 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve s
 
 // API Routes
 app.use("/api/auth", authRoutes); // Authentication routes
-app.use("/api/uploads", uploadRoutes); // File upload routes
+app.use("/", uploadRoutes); // File upload routes
 
 // Root route
 app.get("/", (req, res) => {
