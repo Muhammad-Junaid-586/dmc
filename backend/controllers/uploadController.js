@@ -1,8 +1,8 @@
-// uploadController.js
 const xlsx = require("xlsx");
 const fs = require("fs");
 const path = require("path");
 const cloudinary = require("../cloudinary");
+const fetch = require("node-fetch"); // Install node-fetch if not already installed
 
 // Subject & Student Field Mappings
 const subjectMapping = {
@@ -32,6 +32,22 @@ const studentFieldsMapping = {
   "Remarks": ["remarks", "comment", "feedback"],
 };
 
+// Helper Function: Upload File to Cloudinary
+const uploadToCloudinary = async (filePath, folder, resourceType = "image") => {
+  try {
+    const uploadResponse = await cloudinary.uploader.upload(filePath, {
+      folder: folder,
+      use_filename: true,
+      unique_filename: false,
+      resource_type: resourceType, // "image" for logo, "raw" for Excel
+    });
+    return uploadResponse.secure_url;
+  } catch (err) {
+    console.error(`❌ Cloudinary Upload Error (${resourceType}):`, err);
+    throw new Error(`Error uploading ${resourceType} file`);
+  }
+};
+
 // Upload File Handler
 const uploadFile = async (req, res) => {
   try {
@@ -43,9 +59,9 @@ const uploadFile = async (req, res) => {
     }
 
     let logoUrl = "";
-    let excelFilePath = "";
+    let excelUrl = "";
 
-    // Upload Logo to Cloudinary
+    // Upload Logo to Cloudinary (image)
     if (req.files.logo) {
       const logoPath = req.files.logo[0].path;
 
@@ -54,47 +70,35 @@ const uploadFile = async (req, res) => {
         return res.status(400).json({ error: "Uploaded logo is not a valid image file." });
       }
 
-      try {
-        const uploadResponse = await cloudinary.uploader.upload(logoPath, {
-          folder: "dmc_logos",
-          use_filename: true,
-          unique_filename: false,
-        });
+      logoUrl = await uploadToCloudinary(logoPath, "dmc_logos", "image");
+      console.log("✅ Cloudinary Upload Successful (Logo):", logoUrl);
 
-        logoUrl = uploadResponse.secure_url;
-        console.log("✅ Cloudinary Upload Successful:", logoUrl);
-
-        // Delete Local File Asynchronously
-        fs.promises.unlink(logoPath).catch((err) => console.error("❌ Error deleting file:", err));
-      } catch (err) {
-        console.error("❌ Cloudinary Upload Error:", err);
-        return res.status(500).json({ success: false, msg: "Error uploading logo" });
-      }
+      // Delete Local File Asynchronously
+      fs.promises.unlink(logoPath).catch((err) => console.error("❌ Error deleting file:", err));
     }
 
-    // Save Excel File to Local Storage
+    // Upload Excel to Cloudinary (raw file)
     if (req.files.excel) {
+      const excelPath = req.files.excel[0].path;
+
       // Validate Excel File Type
       if (!req.files.excel[0].mimetype.includes("spreadsheet")) {
         return res.status(400).json({ error: "Uploaded file is not a valid Excel file." });
       }
-      excelFilePath = req.files.excel[0].path;
+
+      excelUrl = await uploadToCloudinary(excelPath, "dmc_excels", "raw");
+      console.log("✅ Cloudinary Upload Successful (Excel):", excelUrl);
+
+      // Delete Local File Asynchronously
+      fs.promises.unlink(excelPath).catch((err) => console.error("❌ Error deleting file:", err));
     }
 
-    // Extract & Validate Input Data
-    const { schoolName, session, class_level, passingCriteria, passingPercentage, failedPapers, passedPapers, subjects, declarationDate,  examType} = req.body;
-    const selectedSubjects = JSON.parse(subjects || "[]");
-
-    console.log("Selected Subjects:", selectedSubjects);
-    console.log("Class Level:", class_level);
-
-    // Check If Excel File Exists
-    if (!fs.existsSync(excelFilePath) || fs.statSync(excelFilePath).size === 0) {
-      return res.status(400).json({ success: false, msg: "Excel file is empty or not found." });
-    }
+    // Download Excel File from Cloudinary
+    const excelResponse = await fetch(excelUrl);
+    const excelBuffer = await excelResponse.buffer();
 
     // Read Excel File
-    const workbook = xlsx.readFile(excelFilePath, { cellDates: true });
+    const workbook = xlsx.read(excelBuffer, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet);
@@ -109,6 +113,13 @@ const uploadFile = async (req, res) => {
       acc[normalizedKey] = key;
       return acc;
     }, {});
+
+    // Extract & Validate Input Data
+    const { schoolName, session, class_level, passingCriteria, passingPercentage, failedPapers, passedPapers, subjects, declarationDate, examType } = req.body;
+    const selectedSubjects = JSON.parse(subjects || "[]");
+
+    console.log("Selected Subjects:", selectedSubjects);
+    console.log("Class Level:", class_level);
 
     // Process Student Data
     const processedData = data.map((student) => {

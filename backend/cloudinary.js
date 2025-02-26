@@ -1,4 +1,3 @@
-// cloudinary.js
 const cloudinary = require("cloudinary").v2;
 
 // Validate Cloudinary environment variables
