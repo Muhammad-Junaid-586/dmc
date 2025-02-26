@@ -116,7 +116,7 @@ const Upload = ({ onDataFetched }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/uploadFiles",
+        "https://dmc-iz4d.vercel.app/uploadFiles",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
