@@ -10,13 +10,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "https://dmc-iz4d.vercel.app/api/auth/register",
-        {
-          username,
-          password,
-        }
-      );
+      const res = await axios.post("http://localhost:5000/api/auth/register", {
+        username,
+        password,
+      });
       localStorage.setItem("token", res.data.token); // Save token to localStorage
       navigate("/upload"); // Redirect to upload page
     } catch (err) {

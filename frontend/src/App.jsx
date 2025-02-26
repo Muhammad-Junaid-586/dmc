@@ -18,7 +18,7 @@ import ComingSoon from "./components/ComingSoon"; // Import Coming Soon Page
 import Footer from "./components/Footer";
 import SingleDesigns from "./components/SingleDesigns";
 import TwoDesigns from "./components/TwoDesigns";
-// import DMCComponent from "./components/DmcComponent";
+import SingleDmcTwo from "./components/SingleDmcTwo";
 
 const App = () => {
   const [students, setStudents] = useState(() => {
@@ -52,7 +52,7 @@ const App = () => {
         />
         <Route path="/singledesign" element={<SingleDesigns />} />
         <Route path="/twodesign" element={<TwoDesigns />} />
-        {/* <Route path="/kb" element={<DMCComponent students={students} />} /> */}
+         <Route path="/kb" element={<SingleDmcTwo students={students} />} /> 
         <Route path="/it" element={<Dmc students={students} />} />
         <Route path="/dmcIntro" element={<DmcIntro students={students} />} />
         <Route path="/dmc" element={<NewDmc students={students} />} />

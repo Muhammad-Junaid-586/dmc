@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FaStar, FaMedal, FaThumbsUp, FaRegSadTear } from "react-icons/fa";
-import "./DmcComponent.css";
+import "./SingleDmcTwo.css";
 
-const DMCComponent = ({ students }) => {
+const SingleDmcTwo = ({ students }) => {
   console.log(students);
   const [logoUrl, setLogoUrl] = useState("");
 
@@ -544,4 +544,4 @@ const DMCComponent = ({ students }) => {
   );
 };
 
-export default DMCComponent;
+export default SingleDmcTwo;
