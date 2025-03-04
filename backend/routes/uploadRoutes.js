@@ -5,7 +5,7 @@ const upload = require("../middleware/multer");
 const { uploadFile } = require("../controllers/uploadController");
 
 // Upload Route
-router.post("/api/uploadFiles", upload.fields([
+router.post("/uploadFiles", upload.fields([
   { name: "logo", maxCount: 1 },  // Image (Cloudinary)
   { name: "excel", maxCount: 1 }, // Excel (Local)
 ]), uploadFile);
