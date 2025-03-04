@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+  "homepage": ".",
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "postbuild": "cp build/index.html build/404.html"
+},
+
   "dependencies": {
     "@tailwindcss/vite": "^4.0.3",
     "axios": "^1.7.9",
